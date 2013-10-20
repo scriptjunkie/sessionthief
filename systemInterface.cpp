@@ -306,7 +306,7 @@ pcap_if_t* SystemInterface::getInterface() {
 
 	//Ask user which one
 	wxSingleChoiceDialog dialog(NULL, _T("Available interfaces:"), _T("Please select one:"), devs.size(),
-			choices, (void**)NULL, wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER | wxOK | wxCANCEL | wxCENTRE | wxSTAY_ON_TOP);
+			choices, (char**)NULL, wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER | wxOK | wxCANCEL | wxCENTRE | wxSTAY_ON_TOP);
 	if (devs.size() > 0 && dialog.ShowModal() == wxID_OK) {
 		interfInt = dialog.GetSelection();
 		alldevs = devs.at(interfInt);
@@ -320,7 +320,7 @@ pcap_if_t* SystemInterface::getInterface() {
 			if(tcpdumpDevs.Count() != 0){ //if we found interfaces
 				//Ask user which one
 				wxSingleChoiceDialog dialog(NULL, _T("Available interfaces (via tcpdump):"), _T("Please select one:"),
-						tcpdumpDevs, (void**)NULL, wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER | wxOK | wxCANCEL | wxCENTRE | wxSTAY_ON_TOP);
+						tcpdumpDevs, (char**)NULL, wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER | wxOK | wxCANCEL | wxCENTRE | wxSTAY_ON_TOP);
 				if (dialog.ShowModal() == wxID_OK){
 					wxString pipeName(wxFileName::CreateTempFileName(_T("sthiefpipe")));
 					mknod(pipeName.ToAscii(), S_IFIFO|0666, 0); // make a FIFO
