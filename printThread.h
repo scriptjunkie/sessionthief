@@ -23,26 +23,26 @@ DECLARE_EVENT_TYPE(mwEVT_THREAD, 67)
 //thread to capture traffic, assemble HTTP requests and send them back to the main frame
 class PrintThread : public wxThread {
 public:
-    //creation
-    PrintThread(bool * capture, pcap_if_t* interf_, unsigned int targetIp_,
-            nviewFrame* mainFrame_) : keepCapturing(capture), mainFrame(mainFrame_),
-            interf(interf_), targetIp(targetIp_), partialGets() {};
-    wxThreadError Create() {
-        return wxThread::Create();
-    };
+	//creation
+	PrintThread(bool * capture, pcap_if_t* interf_, unsigned int targetIp_,
+			nviewFrame* mainFrame_) : keepCapturing(capture), mainFrame(mainFrame_),
+			interf(interf_), targetIp(targetIp_), partialGets() {};
+	wxThreadError Create() {
+		return wxThread::Create();
+	};
 private:
-    //sends message to parent frame, and visualizer if present
-    void sendMessage(wxString& msg, unsigned int sourceIp);
-    //reassembles http requests
-    bool checkComplete(wxString& input, const u_char * pkt_data, int size, int tcpHeaderOffset);
-    virtual void* Entry();
+	//sends message to parent frame, and visualizer if present
+	void sendMessage(wxString& msg, unsigned int sourceIp);
+	//reassembles http requests
+	bool checkComplete(wxString& input, const u_char * pkt_data, int size, int tcpHeaderOffset);
+	virtual void* Entry();
 
-    //variables
-    bool * keepCapturing;//control from parent frame
-    nviewFrame * mainFrame;
-    pcap_if_t * interf;//interface
-    unsigned int targetIp;//target
-    vector<ConnectionInfo> partialGets;
+	//variables
+	bool * keepCapturing;//control from parent frame
+	nviewFrame * mainFrame;
+	pcap_if_t * interf;//interface
+	unsigned int targetIp;//target
+	vector<ConnectionInfo> partialGets;
 };
 
 #endif

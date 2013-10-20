@@ -26,8 +26,8 @@ using namespace std;
 #include <psapi.h>
 //for netbios stuff
 typedef struct _ASTAT_ {
-    ADAPTER_STATUS adapt;
-    NAME_BUFFER    NameBuff [30];
+	ADAPTER_STATUS adapt;
+	NAME_BUFFER	NameBuff [30];
 }ASTAT, * PASTAT;
 #else
 #include <netinet/in.h>
@@ -58,73 +58,73 @@ typedef struct _ASTAT_ {
 //abstracts local computer calls, etc.
 class SystemInterface{
 public:
-    //platform-specific in_addr manipulation
-    static unsigned long in_addrTos_addr(in_addr addr){
+	//platform-specific in_addr manipulation
+	static unsigned long in_addrTos_addr(in_addr addr){
 #ifdef WIN32
-        return (unsigned long) addr.S_un.S_addr;
+		return (unsigned long) addr.S_un.S_addr;
 #else
-        return (unsigned long) addr.s_addr;
+		return (unsigned long) addr.s_addr;
 #endif
-    }
+	}
 private:
-    //simple helper function to return # of 1's in a long
-    static int onesCount(unsigned long number) {
-        int result = 0;
-        unsigned long a = 1;
-        for (u_int i = 0; i < sizeof (unsigned long) *8; i++) {
-            if (number & a)
-                result++;
-            a *= 2;
-        }
-        return result;
-    }
+	//simple helper function to return # of 1's in a long
+	static int onesCount(unsigned long number) {
+		int result = 0;
+		unsigned long a = 1;
+		for (u_int i = 0; i < sizeof (unsigned long) *8; i++) {
+			if (number & a)
+				result++;
+			a *= 2;
+		}
+		return result;
+	}
 public:
-    //information about local computer
-    static wxString getGateway(pcap_if_t* interf);
-    static wxString getLocalIp(const pcap_if_t* interf, unsigned char* output = NULL);
-    static wxString getLocalMac(u_char* destMac= NULL);
-    static pcap_if_t* getInterface();
-    static int getNetmaskBits(pcap_if_t* interf){
-        if (interf->addresses != NULL && interf->addresses->netmask != NULL) {
-            in_addr netmask = ((struct sockaddr_in *) interf->addresses->netmask)->sin_addr;
-            return onesCount(in_addrTos_addr(netmask));
-        } else {
-            return 24; // assume class C subnet if pcap can't figure it out
-        }
-    }
-    static u_int getIpOffset(pcap_t* interf);
-    static bool isEthernet(pcap_if_t* interf){
-        pcap_t *adhandle = pcap_open_live(interf->name, 65536,  0, 1000, NULL );
-        bool isEth = pcap_datalink(adhandle) == DLT_EN10MB;
-        pcap_close(adhandle);
-        return isEth;
-    }
+	//information about local computer
+	static wxString getGateway(pcap_if_t* interf);
+	static wxString getLocalIp(const pcap_if_t* interf, unsigned char* output = NULL);
+	static wxString getLocalMac(u_char* destMac= NULL);
+	static pcap_if_t* getInterface();
+	static int getNetmaskBits(pcap_if_t* interf){
+		if (interf->addresses != NULL && interf->addresses->netmask != NULL) {
+			in_addr netmask = ((struct sockaddr_in *) interf->addresses->netmask)->sin_addr;
+			return onesCount(in_addrTos_addr(netmask));
+		} else {
+			return 24; // assume class C subnet if pcap can't figure it out
+		}
+	}
+	static u_int getIpOffset(pcap_t* interf);
+	static bool isEthernet(pcap_if_t* interf){
+		if(interf->description && strcmp(interf->description,"file") == 0)
+			return false;
+		pcap_t *adhandle = pcap_open_live(interf->name, 65536,  0, 1000, NULL );
+		bool isEth = pcap_datalink(adhandle) == DLT_EN10MB;
+		pcap_close(adhandle);
+		return isEth;
+	}
 
-    //look up mac of a computer
-    static wxString getTargetMac(const u_char dstIP[], const pcap_if_t* interf, u_char* destMac);
-    static wxString getTargetMac(const u_char ethSrcMac[], const u_char srcIP[], const u_char dstIP[], const pcap_if_t* interf, u_char* destMac);
-    
-    //check if browser is running already
-    static bool isProcessRunning(const wxChar* processName);
+	//look up mac of a computer
+	static wxString getTargetMac(const u_char dstIP[], const pcap_if_t* interf, u_char* destMac);
+	static wxString getTargetMac(const u_char ethSrcMac[], const u_char srcIP[], const u_char dstIP[], const pcap_if_t* interf, u_char* destMac);
+	
+	//collect IPs heard on air
+	static void printIps(wxTextCtrl* textBox, pcap_if_t* interf);
 
-    //collect IPs heard on air
-    static void printIps(wxTextCtrl* textBox, pcap_if_t* interf);
-
-    // pretty much inet_ntoa for unsigned ints and wxStrings
-    static wxString ipToString(unsigned int ipbinary) {
-        in_addr ip; //Put IP in box
+	// pretty much inet_ntoa for unsigned ints and wxStrings
+	static wxString ipToString(unsigned int ipbinary) {
+		in_addr ip; //Put IP in box
 #ifdef WIN32
-        ip.S_un.S_addr = ipbinary;
+		ip.S_un.S_addr = ipbinary;
 #else
-        ip.s_addr = ipbinary;
+		ip.s_addr = ipbinary;
 #endif
-        return wxString::FromAscii(inet_ntoa(ip));
-    }
+		return wxString::FromAscii(inet_ntoa(ip));
+	}
 
-    //static vars
-    static pcap_if_t* firstdev; // global device list head. Interfaces are global.
-    static int interfInt; // global device int
-    static wxString portFilter; // global port filter
+	//static vars
+	static pcap_if_t* firstdev; // global device list head. Interfaces are global.
+	static int interfInt; // global device int
+	static wxString portFilter; // global port filter
+	static long tcpdumpPid;
 };
 
 #endif

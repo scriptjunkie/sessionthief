@@ -2,6 +2,7 @@
 #define _NETRSTPROJ_H_
 
 #include "nviewFrame.h"
+#define VERSION 150
 
 #if defined(__GNUG__) && !defined(__APPLE__)
 #pragma interface "netrstproj.cpp"
@@ -11,17 +12,20 @@
 
 // Application class declaration
 class SessionApp: public wxApp {
-    DECLARE_CLASS( SessionApp );
-    DECLARE_EVENT_TABLE();
+	DECLARE_CLASS( SessionApp );
+	DECLARE_EVENT_TABLE();
 public:
-    // Constructor
-    SessionApp();
+	// Constructor
+	SessionApp();
 
-    // Start of the application
-    virtual bool OnInit();
+	// Update check
+	void checkUpdate();
 
-    // Called on exit
-    virtual int OnExit();
+	// Start of the application
+	virtual bool OnInit();
+
+	// Called on exit
+	virtual int OnExit();
 };
 
 // Application instance declaration

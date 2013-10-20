@@ -41,101 +41,101 @@
 #include <pcap.h>
 #include "systemInterface.h"
 #include "arp.h"
-#include "processthread.h"
+#include "processThread.h"
 #include "printThread.h"
 #include "request.h"
 #include "cookieeater.h"
 
 enum { // control ID's
-    netView,
-    txtView,
-    txtSummary,
-    passiveMenu,
-    watchButton,
-    txtIp,
-    aprMenuId,
-    blockMenu,
-    activeMenu,
-    restoreMenu,
-    cookieButton,
-    interfaceMenu,
-    portMenu,
-    firefoxSelectMenu,
-    profileSelectMenu,
-    label1ID,
-    label2ID,
-    clearButton
+	netView,
+	txtView,
+	txtSummary,
+	passiveMenu,
+	watchButton,
+	txtIp,
+	aprMenuId,
+	blockMenu,
+	activeMenu,
+	restoreMenu,
+	cookieButton,
+	interfaceMenu,
+	portMenu,
+	firefoxSelectMenu,
+	profileSelectMenu,
+	label1ID,
+	label2ID,
+	clearButton
 };
 
 // nviewFrame class declaration
 class nviewFrame : public wxFrame {
-    DECLARE_CLASS(nviewFrame)
-    DECLARE_EVENT_TABLE()
+	DECLARE_CLASS(nviewFrame)
+	DECLARE_EVENT_TABLE()
 
 public:
-    /// Constructor
-    nviewFrame(wxWindow* parent, wxWindowID id = netView, const wxString& caption = 
-        _T("Session Thief"), const wxPoint& pos = wxDefaultPosition, const 
-        wxSize& size = wxSize(800, 500), long style = wxDEFAULT_FRAME_STYLE);
+	/// Constructor
+	nviewFrame(wxWindow* parent, wxWindowID id = netView, const wxString& caption = 
+		_T("Session Thief"), const wxPoint& pos = wxDefaultPosition, const 
+		wxSize& size = wxSize(800, 500), long style = wxDEFAULT_FRAME_STYLE);
 
-    // Destructor
-    ~nviewFrame();
+	// Destructor
+	~nviewFrame();
 
-    /// Creates the controls and sizers
-    void CreateControls();
+	/// Creates the controls and sizers
+	void CreateControls();
 
-    // menu and button event handlers
-    void OnPassiveMenuClick(wxCommandEvent& event);
-    void OnBlockMenuClick(wxCommandEvent& event);
-    void OnrestoreMenuClick(wxCommandEvent& event);
-    void OnCookiebuttonClick(wxCommandEvent& event);
-    void OninterfaceMenuClick(wxCommandEvent& event);
-    void OnportMenuClick(wxCommandEvent& event);
-    void OnFirefoxMenuClick(wxCommandEvent& event);
-    void OnProfileMenuClick(wxCommandEvent& event);
-    void OnWatchbuttonClick(wxCommandEvent& event);
-    void OnAprMenuClick(wxCommandEvent& event);
-    void OnActiveMenuClick(wxCommandEvent& event);
-    void OnAboutMenuClick(wxCommandEvent& event);
-    void OnClearbuttonClick(wxCommandEvent& event);
+	// menu and button event handlers
+	void OnPassiveMenuClick(wxCommandEvent& event);
+	void OnBlockMenuClick(wxCommandEvent& event);
+	void OnrestoreMenuClick(wxCommandEvent& event);
+	void OnCookiebuttonClick(wxCommandEvent& event);
+	void OninterfaceMenuClick(wxCommandEvent& event);
+	void OnportMenuClick(wxCommandEvent& event);
+	void OnFirefoxMenuClick(wxCommandEvent& event);
+	void OnProfileMenuClick(wxCommandEvent& event);
+	void OnWatchbuttonClick(wxCommandEvent& event);
+	void OnAprMenuClick(wxCommandEvent& event);
+	void OnActiveMenuClick(wxCommandEvent& event);
+	void OnAboutMenuClick(wxCommandEvent& event);
+	void OnClearbuttonClick(wxCommandEvent& event);
 
-    // message event handler
-    void GetPrintThreadMessage(wxCommandEvent& event);
-    // text click event handler
-    void OnTextSumBoxClick(wxCommandEvent& event);
-    //process thread output
-    void GetProcThreadMessage(wxCommandEvent& event);
+	// message event handler
+	void GetPrintThreadMessage(wxCommandEvent& event);
+	// text click event handler
+	void OnTextSumBoxClick(wxCommandEvent& event);
+	//process thread output
+	void GetProcThreadMessage(wxCommandEvent& event);
 
-    /// wx junk
-    wxBitmap GetBitmapResource(const wxString& name);
-    wxIcon GetIconResource(const wxString& name);
+	/// wx junk
+	wxBitmap GetBitmapResource(const wxString& name);
+	wxIcon GetIconResource(const wxString& name);
 
-    /// Should we show tooltips?
-    static bool ShowToolTips() {
-        return TRUE;
-    }
+	/// Should we show tooltips?
+	static bool ShowToolTips() {
+		return TRUE;
+	}
 private:
-    //helper functions
-    void PrintProcess(const wxString& command);
-    void getNewInterface();
-    //controls
-    wxTextCtrl* textBox;
-    wxTextCtrl* textSumBox;
-    wxTextCtrl* ipBox;
-    wxButton* clearButtonControl;
-    wxButton* cookieButtonControl;
-    wxButton* watchButtonControl;
-    wxMenu *setupMenu;
-    wxMenu *discoverMenu;
-    wxMenu *aprMenu;
-    wxMenu *helpMenu;
+	//helper functions
+	void PrintProcess(const wxString& command);
+	void getNewInterface();
+	//controls
+	wxTextCtrl* textBox;
+	wxTextCtrl* textSumBox;
+	wxTextCtrl* ipBox;
+	wxButton* clearButtonControl;
+	wxButton* cookieButtonControl;
+	wxButton* watchButtonControl;
+	wxMenu *setupMenu;
+	wxMenu *discoverMenu;
+	wxMenu *aprMenu;
+	wxMenu *helpMenu;
 
-    //member data
-    bool aprRunning; // apr info
-    bool processRunning; // for process
-    pcap_if_t* interf;
-    bool captureTcp;
-    vector<Request> requests; //stored HTTP
+	//member data
+	bool aprRunning; // apr info
+	bool processRunning; // for process
+	pcap_if_t* interf;
+	bool captureTcp;
+	vector<Request> requests; //stored HTTP
 };
 
 #endif
